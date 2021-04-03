@@ -9,7 +9,6 @@ class CodeImportConfig extends CodeConfigNode<CodeImport> {
     String importKeyword = 'import ',
     String exportKeyword = 'export ',
     String asKeyword = 'as',
-    bool packageIgnored = true,
     bool pathIgnored = false,
     bool aliasIgnored = false,
     String pathQuote = '\'',
@@ -17,13 +16,10 @@ class CodeImportConfig extends CodeConfigNode<CodeImport> {
     return CodeImportConfig((context, import) {
       // For dart, the package path is used.
       Node pathNode;
-      if (pathIgnored != true && import.path != null) {
-        pathNode = Pad.of(pathQuote, pathQuote, Text(import.path));
+      final path = import.path ?? import.package;
+      if (pathIgnored != true && path != null) {
+        pathNode = Pad.of(pathQuote, pathQuote, Text(path));
       }
-
-      // Include the package name if that is not ignored.
-      Node packageNode;
-      if (packageIgnored != true) packageNode = import.package;
 
       Node aliasNode;
       if (aliasIgnored != true && import.alias != null) {
@@ -33,7 +29,6 @@ class CodeImportConfig extends CodeConfigNode<CodeImport> {
       return CodeExpr.open(
         Container([
           import.isExported == true ? exportKeyword : importKeyword,
-          packageNode,
           pathNode,
           aliasNode,
         ]),
@@ -49,7 +44,7 @@ class CodeImportConfig extends CodeConfigNode<CodeImport> {
     return CodeImportConfig((context, import) {
       final types = import.types;
 
-      var quoteNode = StringFuncs.singleQuotes(import.path);
+      var quoteNode = Pad.singleQuotes(import.path ?? import.package);
       if (types?.isNotEmpty == true) {
         List<Node> typeNodes = types
             .map((e) => Container([
@@ -94,7 +89,7 @@ class CodeImportConfig extends CodeConfigNode<CodeImport> {
           return CodeExpr.open(
             Container([
               importKeyword,
-              import.package,
+              import.package ?? import.path,
               '.*',
             ]),
           );
@@ -128,8 +123,8 @@ class CodeImport extends CodeConfigProxyNode<CodeImport> {
   });
 
   /// Try parse a dynamic value to an argument object.
-  static CodeImport _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeImport>(value, null, error: error);
+  static CodeImport _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeImport>(value, null, error: error);
   }
 
   factory CodeImport.of({

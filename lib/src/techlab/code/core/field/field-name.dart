@@ -23,8 +23,17 @@ class CodeFieldNameConfig extends CodeConfigNode<CodeFieldName> {
         return res;
       }, child);
 
-  factory CodeFieldNameConfig.forJavaLike(Node child) =>
-      CodeFieldNameConfig.of(StringFuncs.camel, child);
+  factory CodeFieldNameConfig.forJavaLike(Node child) {
+    return CodeFieldNameConfig((context, name) {
+      var func = StringFuncs.camel;
+      final modifier = name.modifier;
+      if (modifier?.isStatic == true) {
+        func = StringFuncs.constant;
+      }
+
+      return TextTransform(name.name, func);
+    }, child);
+  }
 }
 
 class CodeFieldName extends CodeConfigProxyNode<CodeFieldName>
@@ -39,9 +48,9 @@ class CodeFieldName extends CodeConfigProxyNode<CodeFieldName>
     @required this.modifier,
   }) : assert(name != null);
 
-  static CodeFieldName _parse(dynamic value, {_NodeParseErrorFunc error}) {
+  static CodeFieldName _parse(dynamic value, {NodeParseErrorFunc error}) {
     // Try to parse the input as the enum name itself.
-    return _parseNode<CodeFieldName>(value, (v) {
+    return parseNode<CodeFieldName>(value, (v) {
       // Try to parse the input as the name expression.
       final name = _parseNameNode(v, error: error);
 

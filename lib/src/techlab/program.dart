@@ -42,6 +42,13 @@ class _Context implements BuildContext, RenderContext {
   }
 
   @override
+  Iterable<T> findAncestorNodesOfExactType<T>() sync* {
+    for (final i in ancestors) {
+      if (i is T) yield i as T;
+    }
+  }
+
+  @override
   T findAncestorNodeOfExactType<T extends Node>() {
     for (final i in ancestors) {
       if (i is T) return i;
@@ -121,12 +128,23 @@ class _Context implements BuildContext, RenderContext {
   set yesToAll(bool value) {
     _program._yesToAll = value;
   }
+
+  @override
+  bool get verbose {
+    return _program._verbose;
+  }
+
+  @override
+  set verbose(bool value) {
+    _program._verbose = value;
+  }
 }
 
 class Program {
   final Node root;
 
-  bool _yesToAll = true;
+  bool _yesToAll;
+  bool _verbose = false;
 
   Program._(this.root);
 

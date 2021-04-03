@@ -33,8 +33,8 @@ class CodeMixinName extends CodeConfigProxyNode<CodeMixinName>
 
   CodeMixinName._(this.name);
 
-  static CodeMixinName _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeMixinName>(value, (v) {
+  static CodeMixinName _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeMixinName>(value, (v) {
       // Try to parse the value as the expression name.
       final name = _parseNameNode(v, error: error);
       if (name == null) return null;

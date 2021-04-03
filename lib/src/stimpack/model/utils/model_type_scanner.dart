@@ -49,11 +49,13 @@ Map<StimModelPackage, Set<StimModelType>> stimModelTypeScan({
     }
 
     // The type is accepted.
-    var foundTypes = res[package];
-    if (foundTypes == null) {
-      res[package] = {type};
-    } else {
-      foundTypes.add(type);
+    if (!type.isCollection) {
+      var foundTypes = res[package];
+      if (foundTypes == null) {
+        res[package] = {type};
+      } else {
+        foundTypes.add(type);
+      }
     }
 
     // Found more types to process.
@@ -64,6 +66,45 @@ Map<StimModelPackage, Set<StimModelType>> stimModelTypeScan({
       // Go into sub fields to find more types.
       for (final field in type.fields) {
         queue.add(field.type);
+      }
+    }
+  }
+
+  return res;
+}
+
+Map<StimModelPackage, Set<StimModelType>> stimMakePackageVsTypeMap({
+  @meta.required Set<StimModelType> types,
+  bool Function(StimModelPackage package) isPackageIgnored,
+  bool Function(StimModelType type) isTypeIgnored,
+}) {
+  if (types?.isNotEmpty != true) return {};
+
+  final res = <StimModelPackage, Set<StimModelType>>{};
+  final ignoredPackages = <StimModelPackage>{};
+
+  for (final type in types) {
+    // Stop if that type is already processed.
+    final package = type.package;
+
+    // Checks if the specified type is ignored or not.
+    if (isTypeIgnored != null && isTypeIgnored(type)) continue;
+
+    // Checks if the specified package is ignored or not.
+    if (ignoredPackages.contains(package)) {
+      continue;
+    } else if (isPackageIgnored != null && isPackageIgnored(package)) {
+      ignoredPackages.add(package);
+      continue;
+    }
+
+    // The type is accepted.
+    if (!type.isCollection) {
+      var foundTypes = res[package];
+      if (foundTypes == null) {
+        res[package] = {type};
+      } else {
+        foundTypes.add(type);
       }
     }
   }

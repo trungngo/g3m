@@ -5,7 +5,7 @@ abstract class Text implements Node {
     if (value == null) {
       return null;
     } else if (value is String) {
-      return _parseNode<Text>(value, (v) => _RawText(v?.toString()));
+      return parseNode<Text>(value, (v) => _RawText(v?.toString()));
     } else if (value is Text) {
       return value;
     } else {

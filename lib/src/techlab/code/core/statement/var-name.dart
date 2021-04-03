@@ -19,8 +19,8 @@ class CodeVarName extends CodeConfigProxyNode<CodeVarName>
 
   CodeVarName._(this.name);
 
-  static CodeVarName _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeVarName>(value, (v) {
+  static CodeVarName _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeVarName>(value, (v) {
       // Try to parse the value as the expression name.
       final name = _parseNameNode(v, error: error);
       if (name == null) return null;

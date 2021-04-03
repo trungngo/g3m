@@ -4,6 +4,8 @@ typedef NodeBuildFunc<T extends Node> = Node Function(
     BuildContext context, T node);
 
 abstract class BuildContext {
+  Iterable<T> findAncestorNodesOfExactType<T>();
+
   /// Walks from bottom to top and try to find an ancestor
   /// with the specified type.
   ///
@@ -25,21 +27,21 @@ abstract class BuildContext {
   ///
   String file;
 
+  bool verbose;
+
   bool yesToAll;
 
   void abort();
 }
 
-abstract class RenderContext {
+abstract class RenderContext extends BuildContext {
+  @override
   String get dir;
 
+  @override
   String get file;
 
   StringSink out;
-
-  void abort();
-
-  bool yesToAll;
 }
 
 /// The abstract node type that all nodes in the tree must

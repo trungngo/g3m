@@ -218,6 +218,7 @@ class StimModel extends StimPack {
       ..readOnly = fieldRule.of(name: 'read only')
       ..writeOnly = fieldRule.of(name: 'write only')
       ..createOnly = fieldRule.of(name: 'create only')
+      ..updateOnly = fieldRule.of(name: 'update only')
       ..systemOnly = fieldRule.of(name: 'system only')
       ..autoIncreased = fieldRule.of(name: 'auto increased')
       ..transient = fieldRule.of(name: 'transient');
@@ -420,6 +421,10 @@ class StimModel extends StimPack {
     // range
     mt.range = _symbolOf('range');
     mt.rangeSet = _symbolSetOf(mt.range);
+
+    // rule
+    mt.typeRule = _symbolOf('type rule');
+    mt.typeRuleSet = _symbolSetOf(mt.typeRule);
 
     // rule
     mt.fieldRule = _symbolOf('field rule');

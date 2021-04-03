@@ -20,8 +20,8 @@ class CodeFunctionThrow extends CodeConfigProxyNode<CodeFunctionThrow> {
   CodeFunctionThrow._({this.type});
 
   /// Try parse a dynamic value to an argument object.
-  static CodeFunctionThrow _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeFunctionThrow>(value, (v) {
+  static CodeFunctionThrow _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeFunctionThrow>(value, (v) {
       final list = _toDynamicNodeList(v);
 
       if (list?.isNotEmpty != true || list.length > 1) {

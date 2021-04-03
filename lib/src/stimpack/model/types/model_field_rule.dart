@@ -31,6 +31,9 @@ class StimModelFieldRuleScope {
       /// After that, it is cannot be modified.
       createOnly,
 
+      /// Marks that this field is only available on update.
+      updateOnly,
+
       /// Marks that this field is a system field. It will not be readable
       /// by users or external systems
       systemOnly,

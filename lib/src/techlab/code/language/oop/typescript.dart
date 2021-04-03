@@ -130,29 +130,26 @@ class TypescriptCodeConfig extends OopCodeConfig<TypescriptCodeConfig> {
 
           // Type configs
 
-          typeNameMapperConfig: (_, child) => CodeTypeNameMapperConfig(child, {
-            // Typescript primitive types need to be lower case
-            'unknown': 'unknown',
-            'any': 'any',
-            'void': 'void',
-            'null': 'null',
-            'string': 'string',
-            'number': 'number',
-            'bigint': 'bigint',
-            'boolean': 'boolean',
-            // Dart types
-            'dynamic': 'dynamic',
-            'void': 'void',
-            'byte': 'number',
-            'short': 'number',
-            'int': 'number',
-            'long': 'number',
-            'float': 'number',
-            'double': 'number',
-            'bool': 'boolean',
-          }),
+          typeNameMapperConfig: (_, child) => CodeTypeNameMapperConfig.of(child,
+              tDynamic: 'any',
+              tVoid: 'void',
+              tBool: 'boolean',
+              tChar: 'string',
+              tString: 'string',
+              tByte: 'number',
+              tShort: 'number',
+              tInteger: 'number',
+              tLong: 'number',
+              tFloat: 'number',
+              tDouble: 'number',
+              others: {
+                // Typescript primitive types need to be lower case
+                'unknown': 'unknown',
+                'number': 'number',
+                'bigint': 'bigint',
+              }),
           typeNameConfig: null,
-          typeConfig: null,
+          typeConfig: (_, child) => CodeTypeConfig.forTypescriptLike(child),
           typeListConfig: null,
 
           // Expr configs
@@ -167,18 +164,15 @@ class TypescriptCodeConfig extends OopCodeConfig<TypescriptCodeConfig> {
           mapLiteralConfig: null,
           cascadeConfig: (_, child) => CodeCascadeConfig.noSupport(child),
           spreadConfig: (_, child) => CodeSpreadConfig.forDartLike(child),
-          awaitConfig: null,
-          yieldConfig: (_, child) => CodeYieldConfig.forDartLike(child),
           refConfig: null,
-          varConfig: (_, child) => CodeVarConfig.forJavascriptLike(child),
+          varConfig: (_, child) => CodeVarConfig.forTypescript(child),
 
           // Statement configs
           exprConfig: null,
-          exprListConfig: null,
+          exprListConfig: (_, child) =>
+              CodeExprListConfig.forTypescriptLike(child),
           statementListConfig: null,
           statementConfig: null,
-          breakConfig: null,
-          continueConfig: null,
           varNameConfig: null,
           ifConfig: null,
           elseIfConfig: null,
@@ -229,18 +223,19 @@ class TypescriptCodeConfig extends OopCodeConfig<TypescriptCodeConfig> {
           enumConfig: null,
 
           // Property configs
-          propertyNameConfig: (_, child) =>
-              CodePropertyNameConfig.forDartLike(child),
+          propertyNameConfig: null,
           propertyListConfig: null,
           propertyGetterConfig: (_, child) =>
-              CodePropertyGetterConfig.forDartLike(child),
+              CodePropertyGetterConfig.forTypescriptLike(child),
           propertySetterConfig: (_, child) =>
-              CodePropertySetterConfig.forDartLike(child),
-          propertyConfig: (_, child) => CodePropertyConfig.forDartLike(child),
+              CodePropertySetterConfig.forTypescriptLike(child),
+          propertyConfig: (_, child) =>
+              CodePropertyConfig.forTypescriptLike(child),
 
           // Interface configs
           interfaceListConfig: null,
-          interfaceConfig: null,
+          interfaceConfig: (_, child) =>
+              CodeInterfaceConfig.forTypescriptLike(child),
 
           // Class configs
           classNameConfig: null,

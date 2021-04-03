@@ -81,7 +81,7 @@ class StimRest extends StimPack {
   }
 
   void _init() {
-    /// Builds the meta definition that defines the structure of this pack.
+    // Builds the meta definition that defines the structure of this pack.
     _buildMeta();
   }
 
@@ -89,139 +89,166 @@ class StimRest extends StimPack {
     final m = stimpack.model, f = m.field, t = m.type;
     final mp = _metaPackage = m.package.of(name: 'rest');
     final mt = onStimModelType;
-    /// Builds type "api"
+    // Builds type "api"
     mt.api = t.symbolOf(name: 'api', package: mp);
 
-    /// Builds type "apiRequest"
+    // Builds type "apiRequest"
     mt.apiRequest = t.symbolOf(name: 'apiRequest', package: mp);
 
-    /// Builds type "apiResponse"
+    // Builds type "apiResponse"
     mt.apiResponse = t.symbolOf(name: 'apiResponse', package: mp);
 
-    /// Builds type "crudApi"
+    // Builds type "crudApi"
     mt.crudApi = t.symbolOf(name: 'crudApi', package: mp);
 
-    /// Builds type "crudCreateOneApi"
+    // Builds type "crudCreateOneApi"
     mt.crudCreateOneApi = t.symbolOf(name: 'crudCreateOneApi', package: mp);
 
-    /// Builds type "crudUpdateOneApi"
+    // Builds type "crudUpdateOneApi"
     mt.crudUpdateOneApi = t.symbolOf(name: 'crudUpdateOneApi', package: mp);
 
-    /// Builds type "crudFindOneApi"
+    // Builds type "crudFindOneApi"
     mt.crudFindOneApi = t.symbolOf(name: 'crudFindOneApi', package: mp);
 
-    /// Builds type "crudDeleteOneApi"
+    // Builds type "crudDeleteOneApi"
     mt.crudDeleteOneApi = t.symbolOf(name: 'crudDeleteOneApi', package: mp);
 
-    /// Builds type "crudFindApi"
+    // Builds type "crudFindApi"
     mt.crudFindApi = t.symbolOf(name: 'crudFindApi', package: mp);
 
-    /// Builds type "crudDeleteApi"
+    // Builds type "crudDeleteApi"
     mt.crudDeleteApi = t.symbolOf(name: 'crudDeleteApi', package: mp);
 
-    /// Builds fields for type "api"
+    // Builds fields for type "api"
     mt.api.fields = {
-      /// field "api"
+      // field "api"
       f.of(name: 'policy', type: t.rbac.policy),
 
-      /// field "api"
+      // field "api"
       f.of(name: 'request', type: mt.apiRequest)..required(),
 
-      /// field "api"
-      f.of(name: 'response', type: mt.apiResponse)..required()
+      // field "api"
+      f.of(name: 'response', type: mt.apiResponse)..required(),
+
+      // field "api"
+      f.of(name: 'comment', type: t.fromDart(String))
     };
 
-    /// Builds fields for type "apiRequest"
+    // Builds fields for type "apiRequest"
     mt.apiRequest.fields = {
-      /// field "apiRequest"
+      // field "apiRequest"
       f.of(name: 'streamed', type: t.fromDart(bool)),
 
-      /// field "apiRequest"
-      f.of(name: 'model', type: t.model.type)..required()
-    };
-
-    /// Builds fields for type "apiResponse"
-    mt.apiResponse.fields = {
-      /// field "apiResponse"
-      f.of(name: 'streamed', type: t.fromDart(bool)),
-
-      /// field "apiResponse"
-      f.of(name: 'model', type: t.model.type)..required()
-    };
-
-    /// Builds fields for type "crudApi"
-    mt.crudApi.fields = {
-      /// field "crudApi"
+      // field "apiRequest"
       f.of(name: 'model', type: t.model.type)..required(),
 
-      /// field "crudApi"
+      // field "apiRequest"
+      f.of(name: 'comment', type: t.fromDart(String))
+    };
+
+    // Builds fields for type "apiResponse"
+    mt.apiResponse.fields = {
+      // field "apiResponse"
+      f.of(name: 'streamed', type: t.fromDart(bool)),
+
+      // field "apiResponse"
+      f.of(name: 'model', type: t.model.type)..required(),
+
+      // field "apiResponse"
+      f.of(name: 'comment', type: t.fromDart(String))
+    };
+
+    // Builds fields for type "crudApi"
+    mt.crudApi.fields = {
+      // field "crudApi"
+      f.of(name: 'model', type: t.model.type)..required(),
+
+      // field "crudApi"
       f.of(name: 'id field', type: t.model.field)..required(),
 
-      /// field "crudApi"
+      // field "crudApi"
       f.of(name: 'create one', type: mt.crudCreateOneApi),
 
-      /// field "crudApi"
+      // field "crudApi"
       f.of(name: 'update one', type: mt.crudUpdateOneApi),
 
-      /// field "crudApi"
+      // field "crudApi"
       f.of(name: 'find one', type: mt.crudFindOneApi),
 
-      /// field "crudApi"
+      // field "crudApi"
       f.of(name: 'delete one', type: mt.crudDeleteOneApi),
 
-      /// field "crudApi"
+      // field "crudApi"
       f.of(name: 'find', type: mt.crudFindApi),
 
-      /// field "crudApi"
+      // field "crudApi"
       f.of(name: 'delete', type: mt.crudDeleteApi)
     };
 
-    /// Builds fields for type "crudCreateOneApi"
+    // Builds fields for type "crudCreateOneApi"
     mt.crudCreateOneApi.fields = {
-      /// field "crudCreateOneApi"
+      // field "crudCreateOneApi"
       f.of(name: 'id field', type: t.model.field),
 
-      /// field "crudCreateOneApi"
-      f.of(name: 'api', type: mt.api)..required()
+      // field "crudCreateOneApi"
+      f.of(name: 'api', type: mt.api)..required(),
+
+      // field "crudCreateOneApi"
+      f.of(name: 'comment', type: t.fromDart(String))
     };
 
-    /// Builds fields for type "crudUpdateOneApi"
+    // Builds fields for type "crudUpdateOneApi"
     mt.crudUpdateOneApi.fields = {
-      /// field "crudUpdateOneApi"
+      // field "crudUpdateOneApi"
       f.of(name: 'id field', type: t.model.field),
 
-      /// field "crudUpdateOneApi"
-      f.of(name: 'api', type: mt.api)..required()
+      // field "crudUpdateOneApi"
+      f.of(name: 'api', type: mt.api)..required(),
+
+      // field "crudUpdateOneApi"
+      f.of(name: 'comment', type: t.fromDart(String))
     };
 
-    /// Builds fields for type "crudFindOneApi"
+    // Builds fields for type "crudFindOneApi"
     mt.crudFindOneApi.fields = {
-      /// field "crudFindOneApi"
+      // field "crudFindOneApi"
       f.of(name: 'id field', type: t.model.field),
 
-      /// field "crudFindOneApi"
-      f.of(name: 'api', type: mt.api)..required()
+      // field "crudFindOneApi"
+      f.of(name: 'api', type: mt.api)..required(),
+
+      // field "crudFindOneApi"
+      f.of(name: 'comment', type: t.fromDart(String))
     };
 
-    /// Builds fields for type "crudDeleteOneApi"
+    // Builds fields for type "crudDeleteOneApi"
     mt.crudDeleteOneApi.fields = {
-      /// field "crudDeleteOneApi"
+      // field "crudDeleteOneApi"
       f.of(name: 'id field', type: t.model.field),
 
-      /// field "crudDeleteOneApi"
-      f.of(name: 'api', type: mt.api)..required()
+      // field "crudDeleteOneApi"
+      f.of(name: 'api', type: mt.api)..required(),
+
+      // field "crudDeleteOneApi"
+      f.of(name: 'comment', type: t.fromDart(String))
     };
 
-    /// Builds fields for type "crudFindApi"
+    // Builds fields for type "crudFindApi"
     mt.crudFindApi.fields = {
-      /// field "crudFindApi"
-      f.of(name: 'api', type: mt.api)..required()
+      // field "crudFindApi"
+      f.of(name: 'api', type: mt.api)..required(),
+
+      // field "crudFindApi"
+      f.of(name: 'comment', type: t.fromDart(String))
     };
 
-    /// Builds fields for type "crudDeleteApi"
+    // Builds fields for type "crudDeleteApi"
     mt.crudDeleteApi.fields = {
-      /// field "crudDeleteApi"
-      f.of(name: 'api', type: mt.api)..required()
+      // field "crudDeleteApi"
+      f.of(name: 'api', type: mt.api)..required(),
+
+      // field "crudDeleteApi"
+      f.of(name: 'comment', type: t.fromDart(String))
     };
   }
 }

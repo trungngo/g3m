@@ -8,6 +8,10 @@ class CodePlaceHolderConfig extends CodeConfigNode<CodePlaceHolder> {
       NodeBuildFunc<CodePlaceHolder> buildFunc, Node child)
       : super(buildFunc, child);
 
+  factory CodePlaceHolderConfig.forXml(Node child) =>
+      CodePlaceHolderConfig.forJavaLike(child,
+          commentFunc: StringFuncs.code.commentXml);
+
   factory CodePlaceHolderConfig.forJavaLike(
     Node child, {
     String startMarker = 'region custom code of ',

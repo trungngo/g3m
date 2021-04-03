@@ -25,9 +25,9 @@ class CodeConstructorList extends CodeConfigProxyNode<CodeConstructorList> {
   CodeConstructorList._(this.constructors);
 
   static CodeConstructorList _parse(dynamic value,
-      {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeConstructorList>(value, (v) {
-      final list = _parseNodeList<CodeConstructor>(v, null);
+      {NodeParseErrorFunc error}) {
+    return parseNode<CodeConstructorList>(value, (v) {
+      final list = parseNodeList<CodeConstructor>(v, null);
       if (list != null) return CodeConstructorList._(list);
       return null;
     }, error: error);

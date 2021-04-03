@@ -25,9 +25,9 @@ class CodeExtensionList extends CodeConfigProxyNode<CodeExtensionList> {
 
   CodeExtensionList._(this.extensions);
 
-  static CodeExtensionList _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeExtensionList>(value, (v) {
-      final list = _parseNodeList<CodeExtension>(v, null);
+  static CodeExtensionList _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeExtensionList>(value, (v) {
+      final list = parseNodeList<CodeExtension>(v, null);
       if (list != null) return CodeExtensionList._(list);
       return null;
     }, error: error);

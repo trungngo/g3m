@@ -5,6 +5,9 @@ class CodeStringLiteralConfig extends CodeConfigNode<CodeStringLiteral> {
       NodeBuildFunc<CodeStringLiteral> buildFunc, Node child)
       : super(buildFunc, child);
 
+  factory CodeStringLiteralConfig.forYamlLike(Node child) =>
+      CodeStringLiteralConfig.forJavaLike(child, quoteString: '');
+
   factory CodeStringLiteralConfig.forDartLike(Node child) =>
       CodeStringLiteralConfig.forJavaLike(child, quoteString: '\'');
 

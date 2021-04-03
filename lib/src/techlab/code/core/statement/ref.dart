@@ -16,8 +16,8 @@ class CodeRef extends CodeConfigProxyNode<CodeRef> implements _NamedNode {
 
   CodeRef._(this.name) : assert(name != null);
 
-  static CodeRef _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeRef>(value, (v) {
+  static CodeRef _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeRef>(value, (v) {
       Node name;
       if (v is CodeField ||
           v is CodeVar ||

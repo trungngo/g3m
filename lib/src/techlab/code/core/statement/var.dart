@@ -4,18 +4,20 @@ class CodeVarConfig extends CodeConfigNode<CodeVar> {
   CodeVarConfig(NodeBuildFunc<CodeVar> buildFunc, Node child)
       : super(buildFunc, child);
 
-  factory CodeVarConfig.forJavaLike(Node child) =>
-      CodeVarConfig((context, expr) {
-        return Container([
-          expr.comment,
-          expr.type,
-          Text.space(),
-          expr.name,
-          expr.init != null ? Container([' = ', expr.init]) : null,
-        ]);
-      }, child);
+  factory CodeVarConfig.forJava(
+      Node child,
+      ) =>
+      CodeVarConfig._internal(
+        child,
+        varKeyword: null,
+        finalKeyword: 'final ',
+        typeNameSeparator: ' ',
+        typeFirst: true,
+      );
 
-  factory CodeVarConfig.forJavascriptLike(Node child,) =>
+  factory CodeVarConfig.forTypescript(
+    Node child,
+  ) =>
       CodeVarConfig._internal(
         child,
         varKeyword: 'let ',
@@ -24,16 +26,30 @@ class CodeVarConfig extends CodeConfigNode<CodeVar> {
         typeFirst: false,
       );
 
-  factory CodeVarConfig.forDartLike(Node child,) =>
+  factory CodeVarConfig.forKotlin(
+    Node child,
+  ) =>
       CodeVarConfig._internal(
         child,
         varKeyword: 'var ',
+        finalKeyword: 'val ',
+        typeNameSeparator: ': ',
+        typeFirst: false,
+      );
+
+  factory CodeVarConfig.forDartLike(
+    Node child,
+  ) =>
+      CodeVarConfig._internal(
+        child,
+        varKeyword: null,
         finalKeyword: 'final ',
         typeNameSeparator: ' ',
         typeFirst: true,
       );
 
-  factory CodeVarConfig._internal(Node child, {
+  factory CodeVarConfig._internal(
+    Node child, {
     @required String varKeyword,
     @required String finalKeyword,
     @required String typeNameSeparator,

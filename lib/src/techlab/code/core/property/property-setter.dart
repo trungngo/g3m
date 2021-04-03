@@ -8,20 +8,56 @@ class CodePropertySetterConfig extends CodeConfigNode<CodePropertySetter> {
   factory CodePropertySetterConfig.forDartLike(Node child) =>
       CodePropertySetterConfig._internal(child, overrideAsAnnotation: true);
 
+  factory CodePropertySetterConfig.forTypescriptLike(Node child) =>
+      CodePropertySetterConfig._internal(child, overrideAsAnnotation: true);
+
   factory CodePropertySetterConfig.forJavaLike(Node child) =>
       CodePropertySetterConfig._internal(child);
+
+  factory CodePropertySetterConfig.forKotlinLike(Node child) =>
+      CodePropertySetterConfig._internal(
+        child,
+        overrideAsAnnotation: true,
+        justSetKeyword: true,
+        setKeyword: 'set',
+        asFunction: true,
+      );
 
   factory CodePropertySetterConfig._internal(
     Node child, {
     String setKeyword = 'set ',
+    bool justSetKeyword,
     bool overrideAsAnnotation = false,
+    bool typeFirst,
+    bool getFirst,
+    bool getAsPartOfName,
+    bool asFunction,
   }) {
     return CodePropertySetterConfig((context, setter) {
       // Gets out the parent property
       final property = context.dependOnAncestorNodeOfExactType<CodeProperty>();
       final modifier = property.modifier;
-      final name = property.name;
-      final type = property.type;
+
+      Node setterNode;
+
+      if (justSetKeyword == true) {
+        setterNode = Container([
+          setKeyword,
+          if (asFunction == true) '(value)',
+        ]);
+      } else {
+        final name = property.name;
+        final type = property.type;
+
+        setterNode = Container([
+          modifier,
+          setKeyword,
+          name,
+          '(',
+          CodeArg.of(name: 'value', type: type),
+          ')',
+        ]);
+      }
 
       final def = Container([
         '\n',
@@ -34,8 +70,7 @@ class CodePropertySetterConfig extends CodeConfigNode<CodePropertySetter> {
             ? '@override\n'
             : null,
 
-        modifier, setKeyword, name,
-        '(', type, ' value', ')',
+        setterNode,
       ]);
 
       if (setter.body == null) {
@@ -71,9 +106,9 @@ class CodePropertySetter extends CodeConfigProxyNode<CodePropertySetter> {
 
   factory CodePropertySetter._parse(
     dynamic value, {
-    _NodeParseErrorFunc error,
+    NodeParseErrorFunc error,
   }) {
-    return _parseNode<CodePropertySetter>(value, (v) {
+    return parseNode<CodePropertySetter>(value, (v) {
       final statements = CodeStatementList._parse(v);
       return CodePropertySetter._(
         body: CodeBlock.of(statements),

@@ -29,9 +29,9 @@ class CodeEnumValue extends CodeConfigProxyNode<CodeEnumValue>
     this.comment,
   });
 
-  static CodeEnumValue _parse(dynamic value, {_NodeParseErrorFunc error}) {
+  static CodeEnumValue _parse(dynamic value, {NodeParseErrorFunc error}) {
     // Try to parse the input as the enum name itself.
-    return _parseNode<CodeEnumValue>(value, (v) {
+    return parseNode<CodeEnumValue>(value, (v) {
       final list = _toDynamicNodeList(value);
       if (list?.isNotEmpty != true) return null;
 

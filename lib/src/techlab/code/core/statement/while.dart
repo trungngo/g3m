@@ -7,18 +7,21 @@ class CodeWhileConfig extends CodeConfigNode<CodeWhile> {
   factory CodeWhileConfig.forJavaLike(
     Node child, {
     String whileKeyword = 'while',
-  }) =>
-      CodeWhileConfig((context, expr) {
-        return Container([
+  }) {
+    return CodeWhileConfig((context, expr) {
+      return CodeExpr.closed(
+        Container([
           expr.comment,
           whileKeyword,
           ' (',
           expr.condition,
           ') ',
-          CodeBlock.of(expr.body),
+          CodeBlock._(expr.body),
           '\n'
-        ]);
-      }, child);
+        ]),
+      );
+    }, child);
+  }
 }
 
 class CodeWhile extends CodeConfigProxyNode<CodeWhile> {
@@ -32,8 +35,7 @@ class CodeWhile extends CodeConfigProxyNode<CodeWhile> {
     @required this.condition,
     @required this.body,
     this.comment,
-  })  : assert(condition != null, "while condition is required"),
-        assert(body != null, 'while body is required');
+  }) : assert(condition != null, 'while condition is required');
 
   factory CodeWhile.of({
     dynamic condition,

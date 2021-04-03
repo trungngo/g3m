@@ -13,13 +13,15 @@ enum _DirectoryPathKind {
 /// - [Directory.absolute] creates a new directory node that
 /// redirects all children's output to an absolute directory.
 ///
-class Directory implements Node {
+class Directory implements Node, PostRenderer {
   /// The relative or absolute path, depending on the path [_kind].
   final String _path;
 
   final _DirectoryPathKind _kind;
 
   final Node _child;
+
+  bool _ignored;
 
   Directory._(this._path, this._kind, this._child);
 
@@ -66,7 +68,19 @@ class Directory implements Node {
 
     // Redirects the output directory to the new one.
     // All sub sequence file output will be written to here.
-    context.dir = path;
+    context.dir = ioPath.relative(path);
+
+    _ignored = GlobIgnore.isIgnored(context, context.dir);
+    if (_ignored) return null;
+
     return _child;
+  }
+
+  @override
+  void postRender(RenderContext context) async {
+    if (_ignored == true) {
+      printWarn('${context.dir} directory is ignored');
+      return;
+    }
   }
 }

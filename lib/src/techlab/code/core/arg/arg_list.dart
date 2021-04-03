@@ -15,35 +15,63 @@ class CodeArgListConfig extends CodeConfigNode<CodeArgList> {
     bool isDart = false,
   }) =>
       CodeArgListConfig((context, expr) {
-        Node required = expr.required?.isNotEmpty == true
-            ? Join.commaSeparated(expr.required)
-            : null;
+        bool hasAnnotation(List<CodeArg> list) {
+          if (list?.isNotEmpty != true) return false;
 
-        Node optional = expr.optional?.isNotEmpty == true
-            ? Join.commaSeparated(expr.optional)
-            : null;
+          final first = list.firstWhere((e) {
+            return e?.annotations?.annotations?.isNotEmpty == true;
+          }, orElse: () => null);
 
-        Node named = expr.named?.isNotEmpty == true
-            ? Join.commaSeparated(expr.named)
-            : null;
+          return first != null;
+        }
+
+        final required = expr.required;
+        final optional = expr.optional;
+        final named = expr.named;
+        final count = (required?.length ?? 0) +
+            (optional?.length ?? 0) +
+            (named?.length ?? 0);
+
+        final needNewLine = count > 4 ||
+            hasAnnotation(required) ||
+            hasAnnotation(optional) ||
+            hasAnnotation(named);
+
+        final separator = needNewLine ? ',\n' : ', ';
+
+        Node requiredNode =
+            required?.isNotEmpty == true ? Join.of(separator, required) : null;
+
+        Node optionalNode =
+            optional?.isNotEmpty == true ? Join.of(separator, optional) : null;
+
+        Node namedNode =
+            named?.isNotEmpty == true ? Join.of(separator, named) : null;
 
         final args = <Node>[];
 
-        if (required != null) {
-          args.add(required);
+        if (requiredNode != null) {
+          args.add(requiredNode);
         }
 
-        if (optional != null) {
-          if (isDart == true) optional = Pad.squareBrackets(optional);
-          args.add(optional);
+        if (optionalNode != null) {
+          if (isDart == true) optionalNode = Pad.squareBrackets(optionalNode);
+          args.add(optionalNode);
         }
 
-        if (named != null) {
-          if (isDart == true) named = Pad.curlyBrackets(named);
-          args.add(named);
+        if (namedNode != null) {
+          if (isDart == true) namedNode = Pad.curlyBrackets(namedNode);
+          args.add(namedNode);
         }
 
-        return Join.commaSeparated(args);
+        if (needNewLine) {
+          return Container([
+            NewLine(),
+            Indent(Join.commaNewLineSeparated(args)),
+          ]);
+        } else {
+          return Join.commaSeparated(args);
+        }
       }, child);
 }
 
@@ -65,9 +93,9 @@ class CodeArgList extends CodeConfigProxyNode<CodeArgList> {
     dynamic named,
   }) {
     return CodeArgList._(
-      required: _parseNodeList<CodeArg>(required, CodeArg._parse),
-      optional: _parseNodeList<CodeArg>(optional, CodeArg._parse),
-      named: _parseNodeList<CodeArg>(named, CodeArg._parse),
+      required: parseNodeList<CodeArg>(required, CodeArg._parse),
+      optional: parseNodeList<CodeArg>(optional, CodeArg._parse),
+      named: parseNodeList<CodeArg>(named, CodeArg._parse),
     );
   }
 }

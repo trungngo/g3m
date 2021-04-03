@@ -7,13 +7,19 @@ class CodePropertyConfig extends CodeConfigNode<CodeProperty> {
   factory CodePropertyConfig.forDartLike(Node child) =>
       CodePropertyConfig._internal(child, overrideAsAnnotation: true);
 
+  factory CodePropertyConfig.forTypescriptLike(Node child) =>
+      CodePropertyConfig._internal(child, overrideAsAnnotation: true);
+
   factory CodePropertyConfig.forJavaLike(Node child) =>
       CodePropertyConfig._internal(child);
+
+  factory CodePropertyConfig.forKotlinLike(Node child) =>
+      CodePropertyConfig._internal(child, generateField: true);
 
   factory CodePropertyConfig._internal(
     Node child, {
     bool overrideAsAnnotation,
-    bool generateFieldIfNoSetterAndGetter = true,
+    bool generateField,
   }) =>
       CodePropertyConfig((context, property) {
         // The data field representing the property.
@@ -23,12 +29,26 @@ class CodePropertyConfig extends CodeConfigNode<CodeProperty> {
         // Property setter
         Node setter = property.setter;
 
-        return Container([
+        Node def = Container([
           getter,
           // Adds a new line to separate getter and setter.
           getter != null && setter != null ? '\n' : null,
           setter,
         ]);
+
+        if (generateField == true) {
+          def = Container([
+            CodeField.of(
+              name: property.name,
+              isFinal: setter == null,
+              type: property.type,
+            ),
+            NewLine(),
+            Indent(def),
+          ]);
+        }
+
+        return def;
       }, child);
 }
 

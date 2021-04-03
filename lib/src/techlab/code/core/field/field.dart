@@ -18,6 +18,7 @@ class CodeFieldConfig extends CodeConfigNode<CodeField> {
         abstractKeyword: 'abstract ',
         staticKeyword: 'static ',
         finalKeyword: 'final ',
+        nonFinalKeyword: null,
         optionalKeyword: null,
       );
 
@@ -34,7 +35,27 @@ class CodeFieldConfig extends CodeConfigNode<CodeField> {
         internalKeyword: null,
         abstractKeyword: 'abstract ',
         staticKeyword: 'static ',
-        finalKeyword: null,
+        finalKeyword: 'final ',
+        nonFinalKeyword: null,
+        optionalKeyword: null,
+      );
+
+  factory CodeFieldConfig.forKotlinLike(Node child) =>
+      CodeFieldConfig._internal(
+        child,
+        typeFirst: false,
+        typeNameSeparator: ': ',
+        optionalSuffix: '?',
+        overrideAsAnnotation: false,
+        overrideKeyword: null,
+        privateKeyword: 'private ',
+        publicKeyword: '',
+        protectedKeyword: 'protected ',
+        internalKeyword: null,
+        abstractKeyword: 'abstract ',
+        staticKeyword: null,
+        finalKeyword: 'val ',
+        nonFinalKeyword: 'var ',
         optionalKeyword: null,
       );
 
@@ -53,6 +74,7 @@ class CodeFieldConfig extends CodeConfigNode<CodeField> {
         abstractKeyword: 'abstract ',
         staticKeyword: 'static ',
         finalKeyword: 'readonly ',
+        nonFinalKeyword: null,
         optionalKeyword: null,
       );
 
@@ -70,6 +92,7 @@ class CodeFieldConfig extends CodeConfigNode<CodeField> {
     @required String abstractKeyword,
     @required String staticKeyword,
     @required String finalKeyword,
+    @required String nonFinalKeyword,
     @required String optionalKeyword,
   }) =>
       CodeFieldConfig((context, field) {
@@ -81,7 +104,7 @@ class CodeFieldConfig extends CodeConfigNode<CodeField> {
           if (field.isInternal == true) internalKeyword,
           if (field.isAbstract == true) abstractKeyword,
           if (field.isStatic == true) staticKeyword,
-          if (field.isFinal == true) finalKeyword,
+          if (field.isFinal == true) finalKeyword else nonFinalKeyword,
           if (field.isOptional == true) optionalKeyword,
         ];
 
@@ -162,8 +185,8 @@ class CodeField extends CodeConfigProxyNode<CodeField> implements _NamedNode {
   });
 
   /// Try parse a dynamic value to an argument object.
-  static CodeField _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeField>(value, (v) {
+  static CodeField _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeField>(value, (v) {
       final list = _toDynamicNodeList(v);
 
       if (list?.isNotEmpty != true || list.length > 3) {

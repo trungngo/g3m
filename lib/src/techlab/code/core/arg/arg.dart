@@ -9,6 +9,7 @@ class CodeArgConfig extends CodeConfigNode<CodeArg> {
       child,
       typeFirst: true,
       acceptThisSyntax: true,
+      finalPrefix: 'final ',
     );
   }
 
@@ -24,15 +25,32 @@ class CodeArgConfig extends CodeConfigNode<CodeArg> {
     );
   }
 
+  factory CodeArgConfig.forKotlin(Node child) {
+    return CodeArgConfig._internal(
+      child,
+      typeFirst: false,
+      separator: ': ',
+      finalPrefix: 'val ',
+      privatePrefix: 'private ',
+      acceptThisSyntax: true,
+      optionalSuffix: '?',
+    );
+  }
+
   factory CodeArgConfig.forJavaLike(Node child) {
-    return CodeArgConfig._internal(child, typeFirst: true);
+    return CodeArgConfig._internal(
+      child,
+      typeFirst: true,
+      finalPrefix: 'final ',
+    );
   }
 
   factory CodeArgConfig._internal(
     Node child, {
     @required bool typeFirst,
     String separator = ' ',
-    String finalPrefix = 'final ',
+    String finalPrefix,
+    String nonFinalPrefix,
     String privatePrefix,
     bool acceptThisSyntax = false,
     String optionalSuffix,
@@ -71,9 +89,11 @@ class CodeArgConfig extends CodeConfigNode<CodeArg> {
         privateModifier = Text(privatePrefix);
       }
 
-      Node finalModifier;
-      if (arg.isFinal == true && finalPrefix != null) {
-        finalModifier = Text(finalPrefix);
+      Node modifier;
+      if (arg.isFinal == true) {
+        if (finalPrefix != null) modifier = Text(finalPrefix);
+      } else {
+        if (nonFinalPrefix != null) modifier = Text(nonFinalPrefix);
       }
 
       Node init = arg.init;
@@ -84,7 +104,7 @@ class CodeArgConfig extends CodeConfigNode<CodeArg> {
       return Container([
         arg.annotations,
         privateModifier,
-        finalModifier,
+        modifier,
         typeAndName,
         init,
       ]);
@@ -125,8 +145,8 @@ class CodeArg extends CodeConfigProxyNode<CodeArg> implements _NamedNode {
   });
 
   /// Try parse a dynamic value to an argument object.
-  static CodeArg _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeArg>(value, (v) {
+  static CodeArg _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeArg>(value, (v) {
       final list = _toDynamicNodeList(v);
 
       if (list?.isNotEmpty != true || list.length > 3) {

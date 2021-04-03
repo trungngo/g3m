@@ -13,6 +13,8 @@ dependencies:
   args: ^1.6.0
   colorize: ^2.0.0
   inflection2: ^0.4.3
+  glob: ^1.2.0
+  diff_match_patch: ^0.3.0
 
 dev_dependencies:
   quiver: ^2.1.3

@@ -64,8 +64,8 @@ void main() {
     var code = JavaCodeConfig(
       CodeStatementList.of([
         CodeReturn.of('a'),
-        CodeBreak(),
-        CodeContinue(),
+        CodeBreakExpr(),
+        CodeContinueExpr(),
       ]),
     );
 

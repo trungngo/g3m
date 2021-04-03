@@ -62,8 +62,8 @@ class CodeEnum extends CodeConfigProxyNode<CodeEnum> implements _NamedNode {
     this.body,
   }) : assert(name != null);
 
-  static CodeEnum _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeEnum>(value, (v) {
+  static CodeEnum _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeEnum>(value, (v) {
       final list = _toDynamicNodeList(value);
       if (list?.isNotEmpty != true) return null;
 

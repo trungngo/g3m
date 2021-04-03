@@ -70,13 +70,13 @@ class CodeExpr extends CodeConfigProxyNode<CodeExpr> {
     dynamic value, {
     bool closed,
     bool acceptNull,
-    _NodeParseErrorFunc error,
+    NodeParseErrorFunc error,
   }) {
     if (value == null && acceptNull == true) {
       return CodeExpr._(CodeNullLiteral(), closed);
     }
 
-    return _parseNode(value, (v) {
+    return parseNode(value, (v) {
       Node child;
       if (v is Node) {
         return CodeExpr._(v, closed);
@@ -107,9 +107,9 @@ class CodeExpr extends CodeConfigProxyNode<CodeExpr> {
     dynamic value, {
     bool closed,
     bool acceptNull,
-    _NodeParseErrorFunc error,
+    NodeParseErrorFunc error,
   }) {
-    var list = _parseNodeList<CodeExpr>(
+    var list = parseNodeList<CodeExpr>(
       value,
       (v) {
         return CodeExpr._parse(

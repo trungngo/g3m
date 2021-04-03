@@ -54,6 +54,7 @@ class CodeFunc {
   StringFunc commentJavaDoc;
   StringFunc commentDoubleSplash;
   StringFunc commentTripleSplash;
+  StringFunc commentXml;
   StringFunc commentHash;
   StringFunc parenthesis;
   StringFunc curlyBracket;
@@ -72,6 +73,7 @@ class CodeFunc {
     commentDoubleSplash = _comment('// ');
     commentTripleSplash = _comment('/// ');
     commentJavaDoc = (s) => '/**\n * ' + s.split('\n').join('\n * ') + '\n */';
+    commentXml = (s) => '<!-- \n * ' + s.split('\n').join('\n    ') + '\n */ -->';
     parenthesis = (s) => '($s)';
     curlyBracket = (s) => '{$s}';
     bracket = (s) => '[$s]';
@@ -120,4 +122,10 @@ extension G3StringExtension on String {
 
     return this;
   }
+
+  String past() => inflection.past(this);
+
+  String pluralize() => inflection.pluralize(this);
+
+  String singularize() => inflection.singularize(this);
 }

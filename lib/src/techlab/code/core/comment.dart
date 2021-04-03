@@ -44,11 +44,24 @@ class CodeCommentConfig extends CodeConfigNode<CodeComment> {
         classFunc: StringFuncs.code.commentJavaDoc,
         mixinFunc: null,
         interfaceFunc: StringFuncs.code.commentJavaDoc,
-        fieldFunc: StringFuncs.code.commentDoubleSplash,
-        propertyFunc: StringFuncs.code.commentDoubleSplash,
+        fieldFunc: StringFuncs.code.commentJavaDoc,
+        propertyFunc: StringFuncs.code.commentJavaDoc,
         constructorFunc: StringFuncs.code.commentJavaDoc,
         functionFunc: StringFuncs.code.commentJavaDoc,
         otherFunc: StringFuncs.code.commentDoubleSplash,
+      );
+
+  factory CodeCommentConfig.forXml(Node child) => CodeCommentConfig.forCode(
+        child,
+        enumFunc: null,
+        classFunc: null,
+        mixinFunc: null,
+        interfaceFunc: null,
+        fieldFunc: null,
+        propertyFunc: null,
+        constructorFunc: null,
+        functionFunc: null,
+        otherFunc: StringFuncs.code.commentXml,
       );
 
   factory CodeCommentConfig.forCode(
@@ -67,7 +80,9 @@ class CodeCommentConfig extends CodeConfigNode<CodeComment> {
         // Finds the nearest container for this comment.
         final container = context.ancestors.firstWhere(
             (e) =>
+                e is CodeBlock ||
                 e is CodeEnum ||
+                e is CodeEnumValue ||
                 e is CodeMixin ||
                 e is CodeClass ||
                 e is CodeInterface ||
@@ -82,7 +97,7 @@ class CodeCommentConfig extends CodeConfigNode<CodeComment> {
         var func;
         if (container != null) {
           // Determines the comment style for the given container.
-          if (container is CodeEnum) {
+          if (container is CodeEnum || container is CodeEnumValue) {
             func = enumFunc;
           } else if (container is CodeMixin) {
             func = mixinFunc;
@@ -114,8 +129,8 @@ class CodeComment extends CodeConfigProxyNode<CodeComment> {
 
   CodeComment(this.text);
 
-  static CodeComment _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeComment>(value, (v) {
+  static CodeComment _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeComment>(value, (v) {
       if (v is Node) {
         return CodeComment(v);
       } else {

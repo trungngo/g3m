@@ -38,8 +38,8 @@ class CodeArgName extends CodeConfigProxyNode<CodeArgName>
     @required this.isPrivate,
   });
 
-  static CodeArgName _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeArgName>(value, (v) {
+  static CodeArgName _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeArgName>(value, (v) {
       // Try to parse the value as the expression name.
       final name = _parseNameNode(v, error: error);
       if (name == null) return null;

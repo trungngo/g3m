@@ -11,11 +11,24 @@ class CodeFunctionConfig extends CodeConfigNode<CodeFunction> {
         returnSeparator: ': ',
       );
 
+  factory CodeFunctionConfig.forKotlinLike(Node child) =>
+      CodeFunctionConfig._internal(
+        child,
+        voidKeyword: null,
+        returnsAfter: true,
+        returnSeparator: ': ',
+        functionKeywords: 'fun ',
+        throwsAsAnnotation: true,
+      );
+
   factory CodeFunctionConfig.forDartLike(Node child) =>
       CodeFunctionConfig._internal(child);
 
   factory CodeFunctionConfig.forJavaLike(Node child) =>
-      CodeFunctionConfig._internal(child);
+      CodeFunctionConfig._internal(
+        child,
+        overrideKeyword: '@Override',
+      );
 
   /// [returnsAfter] determines if the return clause should be put
   /// in front or at the end of the function definition.
@@ -23,39 +36,70 @@ class CodeFunctionConfig extends CodeConfigNode<CodeFunction> {
   factory CodeFunctionConfig._internal(
     Node child, {
     String throwKeyword = 'throws',
+    String voidKeyword = 'void',
+    String overrideKeyword = '@override',
+    String functionKeywords = '',
     bool overrideAsAnnotation = true,
+    bool throwsAsAnnotation = false,
     bool returnsAfter = false,
     String returnSeparator = '',
   }) =>
       CodeFunctionConfig((context, func) {
-        final returnNode = func.returns != null
+        final returns = func.returns ?? voidKeyword;
+        final returnNode = returns != null
             ? Container([
                 if (returnsAfter && returnSeparator?.isNotEmpty == true)
                   returnSeparator,
-                func.returns,
+                returns,
                 if (!returnsAfter) Text.space(),
               ])
             : null;
+
+        Node throwsNode = func.throws;
+
+        if (func.throws?.types?.isNotEmpty == true &&
+            throwsAsAnnotation == true) {
+          // For kotlin
+          // Example: '@Throws(InvalidArgumentException::class)\n'
+          throwsNode = Container([
+            CodeAnnotation.constructorCall(
+              className: throwKeyword,
+              args: func.throws.types.map((t) {
+                return Pad.right('::class', t.type.name);
+              }),
+            ),
+            '\n',
+          ]);
+        }
 
         final def = Container([
           '\n',
           func.comment,
           func.annotations,
 
+          // For kotlin, throws are defined as annotation
+          if (throwsAsAnnotation == true)
+            throwsNode,
+
           // In the case of dart language, override is an annotation.
           // For csharp, it is an modifier.
           overrideAsAnnotation == true && func.modifier?.isOverride == true
-              ? '@override\n'
+              ? '${overrideKeyword}\n'
               : null,
           func.modifier,
-          if (returnsAfter == false) returnNode,
+          if (returnsAfter == false)
+            returnNode,
+          functionKeywords,
           func.name,
           func.generic,
           '(',
           func.args,
           ')',
-          if (returnsAfter == true) returnNode,
-          func.throws,
+          if (returnsAfter == true)
+            returnNode,
+
+          if (throwsAsAnnotation != true)
+            throwsNode,
         ]);
 
         if (func.body == null) {
@@ -76,8 +120,13 @@ class CodeFunction extends CodeConfigProxyNode<CodeFunction>
     implements _NamedNode {
   @override
   final CodeFunctionName name;
+
+  /// The comment at the function level.
   final CodeComment comment;
+
+  /// The list of annotations
   final CodeAnnotationList annotations;
+
   final CodeModifier modifier;
   final CodeGenericParamList generic;
   final CodeArgList args;

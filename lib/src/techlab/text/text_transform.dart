@@ -18,6 +18,7 @@ class TextTransform implements Text, Renderer, PostRenderer {
     return TextTransform._(Node.of(content), transform);
   }
 
+
   @override
   Node build(BuildContext context) {
     return content;

@@ -21,3 +21,4 @@ abstract class PromptNode<T> implements Node {
 
   T _prompt(BuildContext context);
 }
+

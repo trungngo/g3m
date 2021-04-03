@@ -20,9 +20,9 @@ class CodeFieldList extends CodeConfigProxyNode<CodeFieldList> {
 
   CodeFieldList._(this.fields);
 
-  static CodeFieldList _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeFieldList>(value, (v) {
-      final list = _parseNodeList<CodeField>(v, CodeField._parse);
+  static CodeFieldList _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeFieldList>(value, (v) {
+      final list = parseNodeList<CodeField>(v, CodeField._parse);
       if (list != null) return CodeFieldList._(list);
       return null;
     }, error: error);

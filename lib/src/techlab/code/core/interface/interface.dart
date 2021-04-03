@@ -4,18 +4,47 @@ class CodeInterfaceConfig extends CodeConfigNode<CodeInterface> {
   CodeInterfaceConfig(NodeBuildFunc<CodeInterface> buildFunc, Node child)
       : super(buildFunc, child);
 
+  factory CodeInterfaceConfig.forDartLike(Node child) =>
+      CodeInterfaceConfig.forJavaLike(
+        child,
+        interfaceKeyword: 'class ',
+        privateKeyword: '',
+        protectedKeyword: '',
+        publicKeyword: '',
+      );
+
+  factory CodeInterfaceConfig.forTypescriptLike(Node child) =>
+      CodeInterfaceConfig.forJavaLike(
+        child,
+        publicKeyword: 'export ',
+      );
+
   factory CodeInterfaceConfig.forJavaLike(
     Node child, {
     String interfaceKeyword = 'interface ',
     String extendsKeyword = 'extends ',
+    String privateKeyword = 'private ',
+    String protectedKeyword = 'protected ',
+    String publicKeyword = 'public ',
+    String abstractKeyword = 'abstract ',
+    String staticKeyword = 'static ',
   }) =>
       CodeInterfaceConfig((context, interface) {
+        final modifiers = <String>[
+          if (interface.isStatic == true) staticKeyword,
+          if (interface.isPrivate == true) privateKeyword,
+          if (interface.isProtected == true) protectedKeyword,
+          if (interface.isPublic == true) publicKeyword,
+          if (interface.isAbstract == true) abstractKeyword,
+        ];
+
         return Container([
           '\n',
           interface.comment,
+          interface.annotations,
           Trim.leftRight(
             Container([
-              interface.modifier,
+              ...modifiers,
               interfaceKeyword,
               interface.name,
               interface.generic,
@@ -41,9 +70,6 @@ class CodeInterface extends CodeConfigProxyNode<CodeInterface>
   @override
   final CodeTypeName name;
 
-  /// Defines public, private, protected, etc.
-  final CodeModifier modifier;
-
   /// The list of generic param applied for the class.
   final CodeGenericParamList generic;
 
@@ -53,46 +79,64 @@ class CodeInterface extends CodeConfigProxyNode<CodeInterface>
   /// Interface-level code comment.
   final CodeComment comment;
 
+  final CodeAnnotationList annotations;
+
   /// The class body.
   final CodeBlock body;
 
-  CodeInterface({
+  final bool isPrivate;
+
+  final bool isProtected;
+
+  final bool isPublic;
+
+  final bool isAbstract;
+
+  final bool isStatic;
+
+  CodeInterface._({
     @required this.name,
-    this.modifier,
     this.generic,
     this.extend,
     this.comment,
+    this.annotations,
     this.body,
+    this.isPrivate,
+    this.isProtected,
+    this.isPublic,
+    this.isAbstract,
+    this.isStatic,
   }) : assert(name != null);
 
   factory CodeInterface.of({
     @required dynamic name,
     dynamic comment,
-    bool isPrivate,
-    bool isPublic,
-    bool isProtected,
-    bool isInternal,
-    bool isAbstract,
-    bool isStatic,
+    dynamic annotations,
     dynamic generic,
     dynamic extend,
     dynamic fields,
     dynamic functions,
-    Node body,
+    bool isPrivate,
+    bool isProtected,
+    bool isPublic,
+    bool isAbstract,
+    bool isStatic,
+    dynamic body,
   }) =>
-      CodeInterface(
-        name: CodeTypeName.of(name),
-        comment: CodeComment.of(comment),
-        modifier: CodeModifier(
+      CodeInterface._(
+        name: CodeTypeName.of(
+          name,
           isPrivate: isPrivate,
-          isPublic: isPublic,
-          isProtected: isProtected,
-          isInternal: isInternal,
-          isAbstract: isAbstract,
-          isStatic: isStatic,
         ),
+        comment: CodeComment.of(comment),
+        isPrivate: isPrivate,
+        isProtected: isProtected,
+        isPublic: isPublic,
+        isAbstract: isAbstract,
+        isStatic: isStatic,
         generic: CodeGenericParamList.of(generic),
         extend: CodeTypeList.of(extend),
+        annotations: CodeAnnotationList.of(annotations),
         body: CodeBlock.of(
           Container([
             CodeStatement.of(Container([

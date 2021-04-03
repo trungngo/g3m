@@ -23,9 +23,9 @@ class CodeEnumList extends CodeConfigProxyNode<CodeEnumList> {
 
   CodeEnumList._(this.enums);
 
-  static CodeEnumList _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeEnumList>(value, (v) {
-      final list = _parseNodeList<CodeEnum>(v, CodeEnum._parse);
+  static CodeEnumList _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeEnumList>(value, (v) {
+      final list = parseNodeList<CodeEnum>(v, CodeEnum._parse);
       if (list != null) return CodeEnumList._(list);
       return null;
     }, error: error);

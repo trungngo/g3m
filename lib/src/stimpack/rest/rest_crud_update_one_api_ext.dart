@@ -55,7 +55,7 @@ extension ExtStimRestCrudUpdateOneApiScope on StimRestCrudUpdateOneApiScope {
 
     for (final field in fields) {
       // Ignore certain fields
-      if (field.isSystemOnly || field.isTransient || field.isCreateOnly) {
+      if (field.isSystemOnly || field.isCreateOnly) {
         continue;
       }
 

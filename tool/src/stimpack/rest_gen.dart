@@ -34,6 +34,8 @@ void genRestPack() {
   // Fields definitions
   // ---------------------------------------------------------------------------
 
+  final fComment = f.of(name: 'comment', type: t.string);
+
   // streamed is a boolean field. If this is true, the the request/response
   // object should be streamed. This is for grpc api.
   final fStreamed = f.of(name: 'streamed', type: t.bool);
@@ -67,11 +69,13 @@ void genRestPack() {
   tApiRequest.fields = {
     fStreamed,
     fRequiredModel,
+    fComment,
   };
 
   tApiResponse.fields = {
     fStreamed,
     fRequiredModel,
+    fComment,
   };
 
   tApi.fields = {
@@ -83,6 +87,7 @@ void genRestPack() {
 
     // The response body
     fRequiredApiResponse,
+    fComment,
   };
 
   // ---------------------------------------------------------------------------
@@ -105,7 +110,7 @@ void genRestPack() {
 
   /// All crud apis should have security policy and a response.
   for (final api in allCrudApis) {
-    api.fields += fRequiredApi;
+    api.fields += {fRequiredApi, fComment};
   }
 
   tCrudApi.fields = {

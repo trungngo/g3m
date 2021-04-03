@@ -174,19 +174,26 @@ class DartCodeConfig extends OopCodeConfig<DartCodeConfig> {
 
           // Type configs
 
-          typeNameMapperConfig: (_, child) => CodeTypeNameMapperConfig(child, {
-            'dynamic': 'dynamic',
-            'void': 'void',
-            'null': 'null',
-            'byte': 'byte',
-            'short': 'short',
-            'int': 'int',
-            'long': 'long',
-            'float': 'float',
-            'double': 'double',
-            'bool': 'bool',
-          }),
-          typeNameConfig: null,
+          // https://dart.dev/guides/language/language-tour#built-in-types
+          typeNameMapperConfig: (_, child) => CodeTypeNameMapperConfig.of(
+            child,
+            tDynamic: 'dynamic',
+            tVoid: 'void',
+            tBool: 'bool',
+            tChar: 'String',
+            tString: 'String',
+            tByte: 'int',
+            tShort: 'int',
+            tInteger: 'int',
+            tLong: 'int',
+            tFloat: 'double',
+            tDouble: 'double',
+            others: {
+              'int': 'int',
+            }
+          ),
+
+          typeNameConfig: (_, child) => CodeTypeNameConfig.forDartLike(child),
           typeConfig: (_, child) => CodeTypeConfig.forDartLike(child),
           typeListConfig: null,
 
@@ -202,18 +209,14 @@ class DartCodeConfig extends OopCodeConfig<DartCodeConfig> {
           mapLiteralConfig: null,
           cascadeConfig: (_, child) => CodeCascadeConfig.forDartLike(child),
           spreadConfig: (_, child) => CodeSpreadConfig.forDartLike(child),
-          awaitConfig: null,
-          yieldConfig: (_, child) => CodeYieldConfig.forDartLike(child),
           refConfig: null,
           varConfig: (_, child) => CodeVarConfig.forDartLike(child),
 
           // Statement configs
           exprConfig: null,
-          exprListConfig: null,
+          exprListConfig: (_, child) => CodeExprListConfig.forDartLike(child),
           statementListConfig: null,
           statementConfig: null,
-          breakConfig: null,
-          continueConfig: null,
           varNameConfig: null,
           ifConfig: null,
           elseIfConfig: null,
@@ -275,8 +278,7 @@ class DartCodeConfig extends OopCodeConfig<DartCodeConfig> {
 
           // Interface configs
           interfaceListConfig: null,
-          interfaceConfig: (_, child) => CodeInterfaceConfig.forJavaLike(child,
-              interfaceKeyword: 'class '),
+          interfaceConfig: (_, child) => CodeInterfaceConfig.forDartLike(child),
 
           // Class configs
           classNameConfig: (_, child) => CodeClassNameConfig.forDartLike(child),

@@ -30,10 +30,10 @@ class CodeFunctionThrowList extends CodeConfigProxyNode<CodeFunctionThrowList> {
   CodeFunctionThrowList._(this.types);
 
   static CodeFunctionThrowList _parse(dynamic value,
-      {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeFunctionThrowList>(value, (v) {
+      {NodeParseErrorFunc error}) {
+    return parseNode<CodeFunctionThrowList>(value, (v) {
       final list =
-          _parseNodeList<CodeFunctionThrow>(v, CodeFunctionThrow._parse);
+          parseNodeList<CodeFunctionThrow>(v, CodeFunctionThrow._parse);
       if (list != null) return CodeFunctionThrowList._(list);
       return null;
     }, error: error);

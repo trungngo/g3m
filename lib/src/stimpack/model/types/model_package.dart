@@ -59,6 +59,13 @@ class StimModelPackage extends StimModelSymbol<StimModelPackage> {
     }
   }
 
+  String pathOf(String separator) {
+    final packages = ancestors.toList().reversed.toList();
+    packages.add(this);
+
+    return packages.map((p) => p.name).toList().join(separator);
+  }
+
   StimModelPackage copyWith({
     dynamic name,
     StimModelPackage parent,

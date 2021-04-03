@@ -24,11 +24,24 @@ class CodeFunctionReturnList
   CodeFunctionReturnList._(this.types);
 
   static CodeFunctionReturnList _parse(dynamic value,
-      {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeFunctionReturnList>(value, (v) {
-      final list =
-          _parseNodeList<CodeFunctionReturn>(v, CodeFunctionReturn._parse);
+      {NodeParseErrorFunc error}) {
+    return parseNode<CodeFunctionReturnList>(value, (v) {
+      var list =
+          parseNodeList<CodeFunctionReturn>(v, CodeFunctionReturn._parse);
+
+      // Try to parse the type from a type list
+      if (list == null) {
+        final typeList = CodeTypeList.of(value);
+        // converts the type list to the function return list.
+        if (typeList != null) {
+          list = typeList.types.map((t) {
+            return CodeFunctionReturn.of(type: t);
+          });
+        }
+      }
+
       if (list != null) return CodeFunctionReturnList._(list);
+
       return null;
     }, error: error);
   }

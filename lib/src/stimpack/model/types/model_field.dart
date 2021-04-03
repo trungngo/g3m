@@ -18,6 +18,7 @@ class StimModelFieldScope {
     Set<StimModelFieldRule> rules,
     Set<StimModelFilter> filters,
     String comment,
+    dynamic init,
     Set<StimModelTag> tags,
   }) {
     return StimModelField()
@@ -26,6 +27,7 @@ class StimModelFieldScope {
       ..rules = rules
       ..filters = filters
       ..comment = comment
+      ..init = init
       ..tags = tags;
   }
 
@@ -35,6 +37,7 @@ class StimModelFieldScope {
     Set<StimModelFieldRule> rules,
     Set<StimModelFilter> filters,
     String comment,
+    dynamic init,
     Set<StimModelTag> tags,
   }) {
     assert(type != null, 'type is required');
@@ -45,6 +48,7 @@ class StimModelFieldScope {
       filters: filters,
       comment: comment,
       tags: tags,
+      init: init,
     );
   }
 
@@ -55,6 +59,7 @@ class StimModelFieldScope {
     Set<StimModelFilter> filters,
     String comment,
     Set<StimModelTag> tags,
+    dynamic init,
   }) {
     return of(
       name: name,
@@ -63,6 +68,7 @@ class StimModelFieldScope {
       filters: filters,
       comment: comment,
       tags: tags,
+      init: init,
     );
   }
 }
@@ -81,6 +87,8 @@ class StimModelField extends StimModelSymbol<StimModelField> {
 
   String comment;
 
+  dynamic init;
+
   /// Determines if the field is required or not.
   bool get isRequired =>
       rules?.contains(stimpack.model.fieldRule.required) == true;
@@ -96,6 +104,10 @@ class StimModelField extends StimModelSymbol<StimModelField> {
   /// Determines if the field is modifiable after being created or not.
   bool get isCreateOnly =>
       rules?.contains(stimpack.model.fieldRule.createOnly) == true;
+
+  /// Determines if the field is update only or not.
+  bool get isUpdateOnly =>
+      rules?.contains(stimpack.model.fieldRule.updateOnly) == true;
 
   /// Determines if the field is system only or not.
   bool get isSystemOnly =>
@@ -139,6 +151,9 @@ class StimModelField extends StimModelSymbol<StimModelField> {
 
   /// Marks that this field is not modifiable after being created.
   void createOnly() => rules += stimpack.model.fieldRule.createOnly;
+
+  /// Marks that this field is only available during update.
+  void updateOnly() => rules += stimpack.model.fieldRule.updateOnly;
 
   /// Marks that this field is a system field. It will not be readable
   /// by users or external systems
@@ -215,12 +230,12 @@ class StimModelField extends StimModelSymbol<StimModelField> {
 
     void process(StimModelRange range) {
       processed.add(range);
-      if (range.min != null && (min == null || range.min < min)) {
+      if (range.min != null && (min == null || range.min > min)) {
         // record new min
         min = range.min;
       }
 
-      if (range.max != null && (max == null || range.max > max)) {
+      if (range.max != null && (max == null || range.max < max)) {
         // record new max
         max = range.max;
       }
@@ -258,6 +273,7 @@ class StimModelField extends StimModelSymbol<StimModelField> {
     Set<StimModelFilter> filters,
     Set<StimModelTag> tags,
     String comment,
+    dynamic init,
   }) {
     return StimModelField()
       ..name = StimName.of(name ?? this.name)
@@ -265,6 +281,7 @@ class StimModelField extends StimModelSymbol<StimModelField> {
       ..rules = rules ?? this.rules
       ..filters = filters ?? this.filters
       ..comment = comment ?? this.comment
+      ..init = init ?? this.init
       ..tags = tags ?? this.tags;
   }
 }

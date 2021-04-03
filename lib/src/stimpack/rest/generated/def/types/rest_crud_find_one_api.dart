@@ -7,17 +7,23 @@ class StimRestCrudFindOneApi extends StimModelSymbol<StimRestCrudFindOneApi> {
 
   StimRestApi api;
 
+  String comment;
+
   StimRestCrudFindOneApi();
 
 
   /// Creates a new "crudFindOneApi" of [StimRestCrudFindOneApi] type.
-  StimRestCrudFindOneApi copyWith({@required
-  dynamic name, StimModelField idField, @required
-  StimRestApi api, Set<StimModelTag> tags}) {
+  StimRestCrudFindOneApi copyWith(
+    {@required dynamic name,
+    StimModelField idField,
+    @required StimRestApi api,
+    String comment,
+    Set<StimModelTag> tags}) {
     return StimRestCrudFindOneApi()
         ..name = StimName.of(name ?? this.name)
         ..idField = idField ?? this.idField
         ..api = api ?? this.api
+        ..comment = comment ?? this.comment
         ..tags = tags ?? this.tags;
   }
 }
@@ -25,13 +31,17 @@ class StimRestCrudFindOneApi extends StimModelSymbol<StimRestCrudFindOneApi> {
 
 class StimRestCrudFindOneApiScope {
   /// Creates a new "crudFindOneApi" of [StimRestCrudFindOneApi] type.
-  StimRestCrudFindOneApi of({@required
-  dynamic name, StimModelField idField, @required
-  StimRestApi api, Set<StimModelTag> tags}) {
+  StimRestCrudFindOneApi of(
+    {@required dynamic name,
+    StimModelField idField,
+    @required StimRestApi api,
+    String comment,
+    Set<StimModelTag> tags}) {
     return StimRestCrudFindOneApi()
         ..name = StimName.of(name)
         ..idField = idField
         ..api = api
+        ..comment = comment
         ..tags = tags ?? {};
   }
 }

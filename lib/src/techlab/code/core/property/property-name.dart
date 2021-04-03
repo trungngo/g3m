@@ -31,12 +31,13 @@ class CodePropertyNameConfig extends CodeConfigNode<CodePropertyName> {
 
 class CodePropertyName extends CodeConfigProxyNode<CodePropertyName>
     implements _NamedNode {
+  @override
   final Node name;
 
   CodePropertyName._(this.name);
 
   factory CodePropertyName.of(dynamic text) {
-    return _parseNode<CodePropertyName>(text, (v) {
+    return parseNode<CodePropertyName>(text, (v) {
       if (v is CodeField) return CodePropertyName._(v.name.name);
       if (v is CodeFieldName) return CodePropertyName._(v.name);
       return CodePropertyName._(Text(v));

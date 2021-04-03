@@ -45,6 +45,11 @@ class StimModelSymbol<T extends StimModelSymbol<T>> extends StimSymbol<T>
     tags = tags?.where((t) => t.name != name || t.value != value)?.toSet();
   }
 
+  E firstValueOfTagWithValueType<E>() {
+    final value = tags?.firstWhereValueTypeIs<E>()?.value;
+    return value == null ? null : value as E;
+  }
+
   /// Gets the first tag with the specified [name].
   E firstValueOfTag<E>(dynamic name) {
     assert(name != null, 'name is required');

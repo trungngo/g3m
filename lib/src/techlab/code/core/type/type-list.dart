@@ -20,9 +20,9 @@ class CodeTypeList extends CodeConfigProxyNode<CodeTypeList> {
 
   CodeTypeList._(this.types);
 
-  static CodeTypeList _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeTypeList>(value, (v) {
-      final list = _parseNodeList<CodeType>(v, CodeType._parse);
+  static CodeTypeList _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeTypeList>(value, (v) {
+      final list = parseNodeList<CodeType>(v, CodeType._parse);
       if (list != null) return CodeTypeList._(list);
       return null;
     }, error: error);

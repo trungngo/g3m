@@ -33,17 +33,28 @@ extension OnStimModelTagExtension<T extends StimModelTag> on Set<T> {
     return where((e) => e.value == value).toSet();
   }
 
+  Set<T> whereValueTypeIs<E>() {
+    return where((e) => e.value is E).toSet();
+  }
+
   T firstWhereValueIs(dynamic value) {
     return firstWhere((e) => e.value == value, orElse: () => null);
+  }
+
+  T firstWhereValueTypeIs<E>() {
+    return firstWhere((e) => e.value is E, orElse: () => null);
   }
 
   void removeWhereValueIs(dynamic value) {
     removeWhere((e) => e.value == value);
   }
+
+  void removeWhereValueTypeIs<E>() {
+    removeWhere((e) => e.value is E);
+  }
 }
 
 extension OnDynamicTagExtension on dynamic {
-
   /// Converts to stim model tag.
   StimModelTag toTag(dynamic name) {
     assert(name != null, 'name is required');

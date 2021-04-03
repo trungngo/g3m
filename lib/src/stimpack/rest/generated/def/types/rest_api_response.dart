@@ -7,17 +7,23 @@ class StimRestApiResponse extends StimModelSymbol<StimRestApiResponse> {
 
   StimModelType model;
 
+  String comment;
+
   StimRestApiResponse();
 
 
   /// Creates a new "apiResponse" of [StimRestApiResponse] type.
-  StimRestApiResponse copyWith({@required
-  dynamic name, bool streamed, @required
-  StimModelType model, Set<StimModelTag> tags}) {
+  StimRestApiResponse copyWith(
+    {@required dynamic name,
+    bool streamed,
+    @required StimModelType model,
+    String comment,
+    Set<StimModelTag> tags}) {
     return StimRestApiResponse()
         ..name = StimName.of(name ?? this.name)
         ..streamed = streamed ?? this.streamed
         ..model = model ?? this.model
+        ..comment = comment ?? this.comment
         ..tags = tags ?? this.tags;
   }
 }
@@ -25,13 +31,17 @@ class StimRestApiResponse extends StimModelSymbol<StimRestApiResponse> {
 
 class StimRestApiResponseScope {
   /// Creates a new "apiResponse" of [StimRestApiResponse] type.
-  StimRestApiResponse of({@required
-  dynamic name, bool streamed, @required
-  StimModelType model, Set<StimModelTag> tags}) {
+  StimRestApiResponse of(
+    {@required dynamic name,
+    bool streamed,
+    @required StimModelType model,
+    String comment,
+    Set<StimModelTag> tags}) {
     return StimRestApiResponse()
         ..name = StimName.of(name)
         ..streamed = streamed
         ..model = model
+        ..comment = comment
         ..tags = tags ?? {};
   }
 }

@@ -43,8 +43,8 @@ class CodeEnumName extends CodeConfigProxyNode<CodeEnumName>
     @required this.isPrivate,
   }) : assert(name != null);
 
-  static CodeEnumName _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeEnumName>(value, (v) {
+  static CodeEnumName _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeEnumName>(value, (v) {
       // Try to parse the value as the expression name.
       final name = _parseNameNode(v, error: error);
       if (name == null) return null;

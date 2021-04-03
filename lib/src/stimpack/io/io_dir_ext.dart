@@ -48,7 +48,8 @@ extension OnDirScopeExtension on StimIoDir {
     Set<StimIoDir> dirs,
     Set<StimModelTag> tags,
   }) {
-    final childDir = stimpack.io.dir.absoluteDirOf(
+    final childDir = stimpack.io.dir.of(
+      name: path,
       path: path,
       files: files,
       dirs: dirs,
@@ -62,7 +63,7 @@ extension OnDirScopeExtension on StimIoDir {
           'Directory ${childDir.absolutePath} does not exists.');
     }
 
-    dirs += childDir;
+    this.dirs += childDir;
 
     return childDir;
   }
@@ -87,7 +88,7 @@ extension OnDirScopeExtension on StimIoDir {
     }
 
     final fullPath = io_path.joinAll(parts.reversed);
-    return io_path.canonicalize(fullPath);
+    return io_path.normalize(fullPath);
   }
 
   /// Determines if the directory must exists.

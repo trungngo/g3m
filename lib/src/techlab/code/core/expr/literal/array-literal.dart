@@ -4,6 +4,15 @@ class CodeArrayLiteralConfig extends CodeConfigNode<CodeArrayLiteral> {
   CodeArrayLiteralConfig(NodeBuildFunc<CodeArrayLiteral> buildFunc, Node child)
       : super(buildFunc, child);
 
+  factory CodeArrayLiteralConfig.forXml(Node child) =>
+      CodeArrayLiteralConfig.forJavaLike(
+        child,
+        emptyArray: '',
+        openBracket: '\n',
+        closeBracket: '\n',
+        separator: '',
+      );
+
   factory CodeArrayLiteralConfig.forJavaLike(
     Node child, {
     String emptyArray = '[]',

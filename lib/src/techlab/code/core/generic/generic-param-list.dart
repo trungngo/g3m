@@ -8,13 +8,14 @@ class CodeGenericParamListConfig extends CodeConfigNode<CodeGenericParamList> {
   factory CodeGenericParamListConfig.forJavaLike(Node child) =>
       CodeGenericParamListConfig((context, param) {
         final params = param.params;
-        if (params == null || params.isEmpty) {
+        if (params == null) {
           return null;
+        } else if (params.isEmpty) {
+          return Text('<>');
         }
 
         return Pad.angleBrackets(
           Join.commaSeparated(params),
-          onlyIfMissing: true,
         );
       }, child);
 }
@@ -25,9 +26,9 @@ class CodeGenericParamList extends CodeConfigProxyNode<CodeGenericParamList> {
   CodeGenericParamList._(this.params);
 
   static CodeGenericParamList _parse(dynamic value,
-      {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeGenericParamList>(value, (v) {
-      final list = _parseNodeList<CodeGenericParam>(v, CodeGenericParam._parse);
+      {NodeParseErrorFunc error}) {
+    return parseNode<CodeGenericParamList>(value, (v) {
+      final list = parseNodeList<CodeGenericParam>(v, CodeGenericParam._parse);
       if (list != null) return CodeGenericParamList._(list);
       return null;
     }, error: error);

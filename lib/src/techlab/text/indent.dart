@@ -1,7 +1,7 @@
 part of g3.techlab;
 
 /// Defines indentation config for all descendents.
-/// [Ident] can be used to indent child's output with this configuration.
+/// [Indent] can be used to indent child's output with this configuration.
 ///
 class IndentConfig implements Node {
   /// True indicates that the code should use tab character for indentation.

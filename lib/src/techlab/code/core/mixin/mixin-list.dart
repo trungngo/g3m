@@ -24,9 +24,9 @@ class CodeMixinList extends CodeConfigProxyNode<CodeMixinList> {
 
   CodeMixinList._(this.mixins);
 
-  static CodeMixinList _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeMixinList>(value, (v) {
-      final list = _parseNodeList<CodeMixin>(v, null);
+  static CodeMixinList _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeMixinList>(value, (v) {
+      final list = parseNodeList<CodeMixin>(v, null);
       if (list != null) return CodeMixinList._(list);
       return null;
     }, error: error);

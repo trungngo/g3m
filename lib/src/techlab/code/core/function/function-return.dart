@@ -38,8 +38,8 @@ class CodeFunctionReturn extends CodeConfigProxyNode<CodeFunctionReturn> {
   }) : assert(type != null);
 
   /// Try parse a dynamic value to an argument object.
-  static CodeFunctionReturn _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeFunctionReturn>(value, (v) {
+  static CodeFunctionReturn _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeFunctionReturn>(value, (v) {
       final list = _toDynamicNodeList(v);
 
       if (list?.isNotEmpty != true || list.length > 1) {

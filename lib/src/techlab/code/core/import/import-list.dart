@@ -24,9 +24,9 @@ class CodeImportList extends CodeConfigProxyNode<CodeImportList> {
 
   CodeImportList._(this.imports);
 
-  static CodeImportList _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeImportList>(value, (v) {
-      final list = _parseNodeList<CodeImport>(v, CodeImport._parse);
+  static CodeImportList _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeImportList>(value, (v) {
+      final list = parseNodeList<CodeImport>(v, CodeImport._parse);
       if (list != null) return CodeImportList._(list);
       return null;
     }, error: error);

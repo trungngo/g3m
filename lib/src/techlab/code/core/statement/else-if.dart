@@ -38,16 +38,16 @@ class CodeElseIf extends CodeConfigProxyNode<CodeElseIf> {
 
   /// Try parse a dynamic value to an argument object.
   static List<CodeElseIf> _parseList(dynamic value,
-      {_NodeParseErrorFunc error}) {
-    return _parseNode<List<CodeElseIf>>(value, (v) {
-      return _parseNodeList<CodeElseIf>(v, (v) {
+      {NodeParseErrorFunc error}) {
+    return parseNode<List<CodeElseIf>>(value, (v) {
+      return parseNodeList<CodeElseIf>(v, (v) {
         return CodeElseIf._parse(v);
       });
     }, error: error);
   }
 
-  static CodeElseIf _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeElseIf>(value, null, error: error);
+  static CodeElseIf _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeElseIf>(value, null, error: error);
   }
 
   factory CodeElseIf.of({

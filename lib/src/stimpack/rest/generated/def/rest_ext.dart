@@ -33,7 +33,7 @@ class OnStimRbacResourceForRest {
 
 extension OnStimModelTypeForRestExtension on StimModelTypeScope {
   OnStimModelTypeForRest get rest {
-    /// Gets the type meta through stimpack public instance to trigger lazy init of the pack.
+    // Gets the type meta through stimpack public instance to trigger lazy init of the pack.
     return StimRest.stimRestInstance().onStimModelType;
   }
 }
@@ -41,7 +41,7 @@ extension OnStimModelTypeForRestExtension on StimModelTypeScope {
 
 extension OnStimRbacResourceForRestExtension on StimRbacResourceScope {
   OnStimRbacResourceForRest get rest {
-    /// Gets the type meta through stimpack public instance to trigger lazy init of the pack.
+    // Gets the type meta through stimpack public instance to trigger lazy init of the pack.
     return StimRest.stimRestInstance().onStimRbacResource;
   }
 }

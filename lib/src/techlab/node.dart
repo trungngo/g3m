@@ -1,10 +1,10 @@
 part of g3.techlab;
 
-typedef _NodeParseErrorFunc<T> = void Function();
-typedef _NodeParseFunc<T> = T Function(dynamic v);
+typedef NodeParseErrorFunc<T> = void Function();
+typedef NodeParseFunc<T> = T Function(dynamic v);
 
-T _parseNode<T>(dynamic value, _NodeParseFunc<T> next,
-    {_NodeParseErrorFunc<T> error}) {
+T parseNode<T>(dynamic value, NodeParseFunc<T> next,
+    {NodeParseErrorFunc<T> error}) {
   if (value == null) return null;
   if (value is T) return value;
 
@@ -16,13 +16,13 @@ T _parseNode<T>(dynamic value, _NodeParseFunc<T> next,
 
 List<dynamic> _toDynamicNodeList<T>(dynamic value) {
   // This code should not failed.
-  return _parseNodeList(value, (v) => v);
+  return parseNodeList(value, (v) => v);
 }
 
-List<T> _parseNodeList<T>(
+List<T> parseNodeList<T>(
   dynamic value,
-  _NodeParseFunc next, {
-  _NodeParseErrorFunc error,
+  NodeParseFunc next, {
+  NodeParseErrorFunc error,
   bool acceptNull,
 }) {
   if (value == null) return null;
@@ -39,7 +39,7 @@ List<T> _parseNodeList<T>(
     // Try to map the list as custom function.
     var hasError = false;
     final tryParsed = value
-        .map((e) => _parseNode<T>(e, next, error: () => hasError = true))
+        .map((e) => parseNode<T>(e, next, error: () => hasError = true))
         .toList();
 
     if (!hasError) res = tryParsed;
@@ -47,7 +47,7 @@ List<T> _parseNodeList<T>(
     var hasError = false;
     // Try to map via custom function.
     var tryParsed = value.entries
-        .map((e) => _parseNode<T>(e, next, error: () => hasError = true))
+        .map((e) => parseNode<T>(e, next, error: () => hasError = true))
         .toList();
 
     if (!hasError) res = tryParsed;
@@ -70,7 +70,7 @@ List<T> _parseNodeList<T>(
 }
 
 /// FIXME: Make it a _parseNameOf
-Node _parseNameNode(dynamic value, {_NodeParseErrorFunc error}) {
+Node _parseNameNode(dynamic value, {NodeParseErrorFunc error}) {
   Node name;
 
   if (value != null) {

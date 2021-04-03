@@ -4,6 +4,35 @@ class CodeMapLiteralConfig extends CodeConfigNode<CodeMapLiteral> {
   CodeMapLiteralConfig(NodeBuildFunc<CodeMapLiteral> buildFunc, Node child)
       : super(buildFunc, child);
 
+  factory CodeMapLiteralConfig.forXml(Node child) =>
+      CodeMapLiteralConfig((context, literal) {
+        if (literal.values == null) return CodeNullLiteral();
+        var pairs = literal.values.entries.map(
+          (e) {
+            final k = e.key;
+            return Container([
+              '<',
+              k,
+              '>',
+              e.value,
+              '</',
+              k,
+              '>',
+            ]);
+          },
+        ).toList();
+
+        return Container([
+          literal.values.isNotEmpty
+              ? Container([
+                  NewLine(),
+                  Indent(Join.newLineSeparated(pairs)),
+                  NewLine(),
+                ])
+              : null,
+        ]);
+      }, child);
+
   factory CodeMapLiteralConfig.forJavaLike(
     Node child, {
     String openBracket = '{',
@@ -56,7 +85,12 @@ class CodeMapLiteralConfig extends CodeConfigNode<CodeMapLiteral> {
           },
         ).toList();
 
-        return literal.values.isNotEmpty ? Join.of('\n', pairs) : null;
+        return literal.values.isNotEmpty
+            ? Container([
+                Join.of('\n', pairs),
+                NewLine(),
+              ])
+            : null;
       }, child);
 }
 

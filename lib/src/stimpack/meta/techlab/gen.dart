@@ -173,13 +173,15 @@ void stimpackGen(
 }) {
   stimpack.meta.validate(meta);
 
-  Node program = SingleChildNode(
-    Directory.relative(
-      dir,
+  Node program = PromptYesToAll(
+    SingleChildNode(
       Directory.relative(
-        meta.name.snake().toString(),
-        StimpackCodeConfig(
-          StimGenMeta(meta, values),
+        dir,
+        Directory.relative(
+          meta.name.snake().toString(),
+          StimpackCodeConfig(
+            StimGenMeta(meta, values),
+          ),
         ),
       ),
     ),

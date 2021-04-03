@@ -10,6 +10,7 @@ class CodeConstructorConfig extends CodeConfigNode<CodeConstructor> {
         appendConstructorName: false,
         appendClassName: false,
         constructorKeyword: 'constructor',
+        publicKeyword: '',
       );
 
   factory CodeConstructorConfig.forDartLike(Node child) =>
@@ -17,6 +18,10 @@ class CodeConstructorConfig extends CodeConfigNode<CodeConstructor> {
         child,
         appendConstructorName: true,
         appendClassName: true,
+        factoryKeyword: 'factory ',
+        publicKeyword: '',
+        privateKeyword: '',
+        protectedKeyword: '',
       );
 
   factory CodeConstructorConfig.forJavaLike(Node child) =>
@@ -31,6 +36,10 @@ class CodeConstructorConfig extends CodeConfigNode<CodeConstructor> {
     String constructorKeyword,
     bool appendClassName = true,
     bool appendConstructorName = false,
+    String factoryKeyword,
+    String privateKeyword = 'private ',
+    String publicKeyword = 'public ',
+    String protectedKeyword = 'protected ',
   }) =>
       CodeConstructorConfig((context, constructor) {
         final clazz = context.dependOnAncestorNodeOfExactType<CodeClass>();
@@ -47,12 +56,20 @@ class CodeConstructorConfig extends CodeConfigNode<CodeConstructor> {
           name = constructor.name;
         }
 
+        final keywords = <String>[
+          if (constructor.isFactory == true) factoryKeyword,
+          if (constructor.isPrivate == true) privateKeyword,
+          if (constructor.isProtected == true) protectedKeyword,
+          if (constructor.isPublic == true) publicKeyword,
+        ];
+
         final def = Container([
           '\n',
           constructor.comment,
+          constructor.annotations,
           Trim.leftRight(
             Container([
-              constructor.modifier,
+              ...keywords,
               constructorKeyword,
               name,
               '(',
@@ -84,11 +101,11 @@ class CodeConstructor extends CodeConfigProxyNode<CodeConstructor>
   @override
   final CodeConstructorName name;
 
-  /// Defines public, private, protected, etc.
-  final CodeModifier modifier;
-
   /// The comment level for constructor.
   final CodeComment comment;
+
+  /// The list of annotations
+  final CodeAnnotationList annotations;
 
   /// The constructor argument list.
   final CodeArgList args;
@@ -99,13 +116,25 @@ class CodeConstructor extends CodeConfigProxyNode<CodeConstructor>
   /// The class implementation body
   final CodeBlock body;
 
+  final bool isFactory;
+
+  final bool isPrivate;
+
+  final bool isPublic;
+
+  final bool isProtected;
+
   CodeConstructor._({
     this.name,
-    this.modifier,
     this.comment,
+    this.annotations,
     this.args,
     this.init,
     this.body,
+    this.isFactory,
+    this.isPrivate,
+    this.isPublic,
+    this.isProtected,
   });
 
   /// Creates a constructor method.
@@ -134,23 +163,24 @@ class CodeConstructor extends CodeConfigProxyNode<CodeConstructor>
     bool private,
     bool public,
     bool protected,
-    bool internal,
     dynamic requiredArgs,
     dynamic optionalArgs,
     dynamic namedArgs,
     dynamic comment,
+    dynamic annotations,
     dynamic init,
     dynamic body,
   }) {
     return CodeConstructor._(
-      name: CodeConstructorName.of(name),
-      modifier: CodeModifier(
-        isFactory: factory,
+      name: CodeConstructorName.of(
+        name,
         isPrivate: private,
-        isPublic: public,
         isProtected: protected,
-        isInternal: internal,
       ),
+      isFactory: factory,
+      isPrivate: private,
+      isPublic: public,
+      isProtected: protected,
       args: CodeArgList.of(
         required: requiredArgs,
         optional: optionalArgs,
@@ -158,6 +188,7 @@ class CodeConstructor extends CodeConfigProxyNode<CodeConstructor>
       ),
       init: CodeStatementList.of(init, closed: true),
       comment: CodeComment.of(comment),
+      annotations: CodeAnnotationList.of(annotations),
       body: CodeBlock.of(CodeStatementList.of(body)),
     );
   }

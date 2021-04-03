@@ -6,12 +6,21 @@ class CodeAnnotationListConfig extends CodeConfigNode<CodeAnnotationList> {
       : super(buildFunc, child);
 
   factory CodeAnnotationListConfig.forJavaLike(Node child) =>
-      CodeAnnotationListConfig(
-          (context, param) => Container([
-                Join.newLineSeparated(param.annotations),
-                '\n',
-              ]),
-          child);
+      CodeAnnotationListConfig((context, param) {
+        if (param.annotations?.isNotEmpty != true) return null;
+        final isInArg = context.findAncestorNodeOfExactType<CodeArg>() != null;
+        if (isInArg) {
+          return Container([
+            Join.spaceSeparated(param.annotations),
+            ' ',
+          ]);
+        } else {
+          return Container([
+            Join.newLineSeparated(param.annotations),
+            '\n',
+          ]);
+        }
+      }, child);
 }
 
 class CodeAnnotationList extends CodeConfigProxyNode<CodeAnnotationList> {
@@ -19,10 +28,10 @@ class CodeAnnotationList extends CodeConfigProxyNode<CodeAnnotationList> {
 
   CodeAnnotationList._(this.annotations);
 
-  static CodeAnnotationList _parse(dynamic value, {_NodeParseErrorFunc error}) {
-    return _parseNode<CodeAnnotationList>(value, (v) {
+  static CodeAnnotationList _parse(dynamic value, {NodeParseErrorFunc error}) {
+    return parseNode<CodeAnnotationList>(value, (v) {
       final list =
-          _parseNodeList<CodeAnnotation>(v, (v) => CodeAnnotation.of(v));
+          parseNodeList<CodeAnnotation>(v, (v) => CodeAnnotation.of(v));
       if (list != null) return CodeAnnotationList._(list);
       return null;
     }, error: error);

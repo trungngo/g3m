@@ -36,11 +36,11 @@ class CodeStatementList extends CodeConfigProxyNode<CodeStatementList> {
   factory CodeStatementList._parse(
     dynamic value, {
     bool closed,
-    _NodeParseErrorFunc error,
+    NodeParseErrorFunc error,
   }) {
-    return _parseNode<CodeStatementList>(value, (v) {
+    return parseNode<CodeStatementList>(value, (v) {
       // Try to parse the body as the node list.
-      final statements = _parseNodeList<CodeStatement>(v, (v) {
+      final statements = parseNodeList<CodeStatement>(v, (v) {
         return CodeStatement._parse(v, closed: closed);
       });
 

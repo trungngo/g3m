@@ -36,7 +36,11 @@ class CodeBlockConfig extends CodeConfigNode<CodeBlock> {
       String open, String close, bool newLine, Node child) {
     return CodeBlockConfig((context, codeBlock) {
       var body = codeBlock.body;
-      if (body == null) return _RawText('{}');
+      if (body == null ||
+          body is CodeStatementList && body.statements?.isNotEmpty != true) {
+        // TODO: Handle this case better when the rendered body is empty text.
+        return _RawText('${open}${close}');
+      }
       return Container([
         newLine ? '\n' : null,
         open,

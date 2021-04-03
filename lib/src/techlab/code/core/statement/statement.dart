@@ -23,10 +23,10 @@ class CodeStatement extends CodeConfigProxyNode<CodeStatement> {
   static CodeStatement _parse(
     dynamic value, {
     bool closed,
-    _NodeParseErrorFunc error,
+    NodeParseErrorFunc error,
   }) {
     // Try to parse the statement as a [CodeStatement] first.
-    return _parseNode<CodeStatement>(value, (v) {
+    return parseNode<CodeStatement>(value, (v) {
       Node child;
       // If the text is a string, gives that a priority
       // over a [CodeStringLiteral] parsed by [CodeExpr] later.

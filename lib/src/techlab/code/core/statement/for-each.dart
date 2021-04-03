@@ -8,6 +8,23 @@ class CodeForEachConfig extends CodeConfigNode<CodeForEach> {
     return CodeForEachConfig.forJavaLike(child, inKeyword: ' in ');
   }
 
+  factory CodeForEachConfig.forKotlin(Node child) {
+    return CodeForEachConfig((context, expr) {
+      return CodeExpr.closed(
+        Container([
+          expr.comment,
+          'for (',
+          CodeRef.of(expr.item),
+          ' in ',
+          expr.collection,
+          ') ',
+          CodeBlock.of(expr.body),
+          '\n'
+        ]),
+      );
+    }, child);
+  }
+
   factory CodeForEachConfig.forJavaLike(
     Node child, {
     String forEachKeyword = 'for',
@@ -23,7 +40,7 @@ class CodeForEachConfig extends CodeConfigNode<CodeForEach> {
           inKeyword,
           expr.collection,
           ') ',
-          CodeBlock.of(expr.body),
+          CodeBlock._(expr.body),
           '\n'
         ]),
       );
@@ -32,7 +49,7 @@ class CodeForEachConfig extends CodeConfigNode<CodeForEach> {
 }
 
 class CodeForEach extends CodeConfigProxyNode<CodeForEach> {
-  final CodeExpr item;
+  final Node item;
   final CodeExpr collection;
   final CodeStatementList body;
   final CodeComment comment;
@@ -53,7 +70,7 @@ class CodeForEach extends CodeConfigProxyNode<CodeForEach> {
     String comment,
   }) {
     return CodeForEach._(
-      item: CodeExpr.of(item),
+      item: Node.of(item),
       collection: CodeExpr.of(collection),
       body: CodeStatementList.of(body),
       comment: CodeComment.of(comment),

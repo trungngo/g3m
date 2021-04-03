@@ -23,10 +23,17 @@ class StimRestCrudApi extends StimModelSymbol<StimRestCrudApi> {
 
 
   /// Creates a new "crudApi" of [StimRestCrudApi] type.
-  StimRestCrudApi copyWith({@required
-  dynamic name, @required
-  StimModelType model, @required
-  StimModelField idField, StimRestCrudCreateOneApi createOne, StimRestCrudUpdateOneApi updateOne, StimRestCrudFindOneApi findOne, StimRestCrudDeleteOneApi deleteOne, StimRestCrudFindApi find, StimRestCrudDeleteApi delete, Set<StimModelTag> tags}) {
+  StimRestCrudApi copyWith(
+    {@required dynamic name,
+    @required StimModelType model,
+    @required StimModelField idField,
+    StimRestCrudCreateOneApi createOne,
+    StimRestCrudUpdateOneApi updateOne,
+    StimRestCrudFindOneApi findOne,
+    StimRestCrudDeleteOneApi deleteOne,
+    StimRestCrudFindApi find,
+    StimRestCrudDeleteApi delete,
+    Set<StimModelTag> tags}) {
     return StimRestCrudApi()
         ..name = StimName.of(name ?? this.name)
         ..model = model ?? this.model
@@ -44,10 +51,17 @@ class StimRestCrudApi extends StimModelSymbol<StimRestCrudApi> {
 
 class StimRestCrudApiScope {
   /// Creates a new "crudApi" of [StimRestCrudApi] type.
-  StimRestCrudApi of({@required
-  dynamic name, @required
-  StimModelType model, @required
-  StimModelField idField, StimRestCrudCreateOneApi createOne, StimRestCrudUpdateOneApi updateOne, StimRestCrudFindOneApi findOne, StimRestCrudDeleteOneApi deleteOne, StimRestCrudFindApi find, StimRestCrudDeleteApi delete, Set<StimModelTag> tags}) {
+  StimRestCrudApi of(
+    {@required dynamic name,
+    @required StimModelType model,
+    @required StimModelField idField,
+    StimRestCrudCreateOneApi createOne,
+    StimRestCrudUpdateOneApi updateOne,
+    StimRestCrudFindOneApi findOne,
+    StimRestCrudDeleteOneApi deleteOne,
+    StimRestCrudFindApi find,
+    StimRestCrudDeleteApi delete,
+    Set<StimModelTag> tags}) {
     return StimRestCrudApi()
         ..name = StimName.of(name)
         ..model = model

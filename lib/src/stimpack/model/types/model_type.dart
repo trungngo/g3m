@@ -20,6 +20,8 @@ class StimModelTypes {
       patternSet,
       range,
       rangeSet,
+      typeRule,
+      typeRuleSet,
       fieldRule,
       fieldRuleSet,
       error,
